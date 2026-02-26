@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>for you 🤍</title>
+
+<style>
+body{
+margin:0;
+font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+background:linear-gradient(-45deg,#ffd1dc,#ffffff,#f8c8ff,#ff4d6d);
+background-size:400% 400%;
+animation:bg 15s ease infinite;
+color:#222;
+overflow-x:hidden;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+/* hearts */
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:18px;
+opacity:0.4;
+animation:floatUp linear infinite;
+pointer-events:none;
+z-index:0;
+}
+@keyframes floatUp{
+to{transform:translateY(-110vh);opacity:0;}
+}
+
+/* layout */
+.center{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+box-sizing:border-box;
+opacity:0;
+transform:translateY(20px);
+transition:opacity 1.2s ease, transform 1.2s ease;
+}
+.center.show{
+opacity:1;
+transform:translateY(0);
+}
+
+.box{
+background:white;
+width:95%;
+max-width:520px;
+border-radius:30px;
+padding:30px;
+text-align:center;
+box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+#slides{
+height:100vh;
+overflow-y:auto;
+scroll-snap-type:y mandatory;
+scroll-behavior:smooth;
+}
+
+.slide{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:40px 20px;
+scroll-snap-align:start;
+opacity:0;
+transform:translateY(20px);
+transition:opacity 1.2s ease, transform 1.2s ease;
+}
+.slide.show{
+opacity:1;
+transform:translateY(0);
+}
+
+img{
+width:90%;
+max-width:320px;
+height:auto;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+button{
+margin:10px;
+padding:10px 22px;
+border:none;
+border-radius:25px;
+background:#ff4d6d;
+color:white;
+font-size:0.95rem;
+cursor:pointer;
+transition:0.3s ease;
+}
+button:hover{
+background:#8338ec;
+}
+
+.preserve{
+white-space:pre-wrap;
+line-height:1.6;
+}
+
+.word{
+opacity:0;
+transition:opacity 1.2s ease;
+}
+</style>
+</head>
+<body>
+
+<div id="main"></div>
+
+<script>
+
+const main=document.getElementById("main");
+
+/* floating hearts */
+function createHeart(){
+const heart=document.createElement("div");
+heart.classList.add("heart");
+heart.innerHTML=["💗","🤍","💜"][Math.floor(Math.random()*3)];
+if(Math.random()<0.5){
+heart.style.left=Math.random()*10+"vw";
+}else{
+heart.style.left=90+Math.random()*10+"vw";
+}
+heart.style.animationDuration=6+Math.random()*6+"s";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),12000);
+}
+setInterval(createHeart,1200);
+
+/* word fade 250 WPM */
+function animateWords(el, speed=220, callback=null){
+const text=el.innerHTML.trim();
+el.innerHTML="";
+el.style.visibility="visible";
+
+const words=text.split(" ");
+let total=words.length*speed;
+
+words.forEach((word,i)=>{
+const span=document.createElement("span");
+span.textContent=word+" ";
+span.classList.add("word");
+el.appendChild(span);
+setTimeout(()=>span.style.opacity=1,i*speed);
+});
+
+if(callback){
+setTimeout(callback,total+800);
+}
+}
+
+function setPage(content){
+main.innerHTML=content;
+setTimeout(()=>{
+main.firstElementChild.classList.add("show");
+},50);
+}
+
+/* FIRST PAGE */
+setPage(`
+<div class="center">
+<div class="box">
+<h2>hiii happiest birthday 🤍</h2>
+<p>so love, want to see the surprise?</p>
+<button onclick="beforeThou()">yes</button>
+<button onclick="plead1()">no</button>
+</div>
+</div>
+`);
+
+function plead1(){
+setPage(`
+<div class="center">
+<div class="box">
+<p>pray, deny me not so swiftly…</p>
+<button onclick="beforeThou()">yes</button>
+<button onclick="plead2()">no</button>
+</div>
+</div>
+`);
+}
+
+function plead2(){
+setPage(`
+<div class="center">
+<div class="box">
+<p>must thou wound me thus? grant me but this one mercy.</p>
+<button onclick="beforeThou()">fine, proceed then</button>
+</div>
+</div>
+`);
+}
+
+function beforeThou(){
+setPage(`
+<div class="center">
+<div class="box preserve">
+<p>
+Before thou scrollest further, pause —
+for what lies ahead is woven not merely of code,
+but of feeling.
+</p>
+<button onclick="showPoem()">next</button>
+</div>
+</div>
+`);
+}
+
+function showPoem(){
+setPage(`
+<div class="center">
+<div class="box preserve">
+<p id="poemText" style="visibility:hidden;">
+In the quiet hum of the everyday,
+there is a steady rhythm, a pulse
+that speaks your name without
+ever needing to part my lips.
+Your eyes are gilded glass,
+shattered light held in a soft
+circle of amber and earth,
+deep, dark, and dreaming of worlds I have yet to map.
+To look into them is to fall
+upward, tumbling into a sky
+that never knows the sting of
+a setting sun.
+Time is a thief, they say, but
+it cannot steal what has
+no end. My love is not a
+season that fades when the
+frost bites the vine; it is
+the vine itself, twisting
+forever around the pillars
+of your soul, rooting
+deeper with every breath
+we borrow from the wind.
+</p>
+<div id="poemNext" style="opacity:0;transition:opacity 1.5s ease;">
+<button onclick="showSlides()">next</button>
+</div>
+</div>
+</div>
+`);
+
+animateWords(document.getElementById("poemText"),220,function(){
+document.getElementById("poemNext").style.opacity=1;
+});
+}
+
+function showSlides(){
+main.innerHTML=`
+<div id="slides">
+
+<div class="slide">
+<img src="alone.jpg">
+<p id="p1" class="preserve" style="visibility:hidden;">
+soo itsss thee dayyyyyyyyyy youuu are turned 17 yayyyyyyyyyyyyyyyyyyyy Happiesttttttttt Birthdayyyyyyyyyy to myy pyraaaaaaa bachaaaaaaaaaaaaa lots and lots of blessing for you
+</p>
+</div>
+
+<div class="slide">
+<img src="auto.jpg">
+<p id="p2" class="preserve" style="visibility:hidden;">
+soo on thisss ocassionn meh apkaaaa pansdida insannn khenaaa chahta hu kiiiiiiiiiiiiiii you are the bestttttttttttttttttt bessstttttttttttttttttttttttttt girffirenddddd in the entireeeeeeeeeeeeeeeee worlddddddddddddddddddddddd and abseee achaaa koi ni h and stayinggg with youuuuuu is absolutely the besttt thingggg inn myy lifeeeeeee and kahi bhe apk sathhh jana I loveee it
+</p>
+</div>
+
+<div class="slide">
+<img src="leather-jacket.jpg">
+<p id="p3" class="preserve" style="visibility:hidden;">
+mehh hameshaaaaaaaaaaaa apkaaaaaaaaaaaa sathhhhh rehna chahta hu yeah bdayyy onlineeee he kyo na hooooo but agliiii baar apka sathhhh reh kr he maanigaaaaaa and alwaysss aisaaaa he sathh rehagaaaaaaaaaaaaa ❤️❤️❤️❤️❤️
+</p>
+<div id="finalBtn" style="opacity:0;transition:opacity 1.5s ease;">
+<button onclick="finalPage()">next</button>
+</div>
+</div>
+
+</div>
+`;
+
+setTimeout(()=>{
+document.querySelectorAll(".slide").forEach(sl=>sl.classList.add("show"));
+},50);
+
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+animateWords(entry.target,220);
+observer.unobserve(entry.target);
+
+if(entry.target.id==="p3"){
+setTimeout(()=>{
+document.getElementById("finalBtn").style.opacity=1;
+},entry.target.innerText.split(" ").length*220+800);
+}
+}
+});
+},{threshold:0.6});
+
+observer.observe(document.getElementById("p1"));
+observer.observe(document.getElementById("p2"));
+observer.observe(document.getElementById("p3"));
+}
+
+function finalPage(){
+setPage(`
+<div class="center">
+<div class="box preserve">
+<p id="finalText" style="visibility:hidden;">
+at the enddd....
+meh yeah kehnaaa chahugaaaa kiiii I alwayss, alwaysssssssssssssss want to stick by you —
+not just for a moment, not just for a phase, but for eternity.
+i mean truly stay with you, beside you.
+
+so here it is —
+once again, a very, very happy birthday, baby 💕
+
+i want you today, tomorrow, and for all the days after.
+not just as a chapter — but as my whole story.
+
+i don’t know what the future looks like,
+but i know i want you in it.
+
+so... will you be my forever?~
+</p>
+</div>
+</div>
+`);
+
+animateWords(document.getElementById("finalText"),220);
+}
+
+</script>
+</body>
+</html>
